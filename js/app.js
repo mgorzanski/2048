@@ -5,7 +5,7 @@ window.$ = $;
 class Game {
   constructor() {
     this.board = [
-      2,2,0,0,
+      2,2,2,2,
       0,0,0,0,
       0,0,0,0,
       0,0,0,0
@@ -47,6 +47,7 @@ class Game {
           var index = 0;
         } else if(direction == "up" || direction === "down") {
           var tempBoard = getColArray(board.slice(0), 0);
+          var index = 0;
         }
       } else if(row_col === 1) {
         if(direction === "left" || direction === "right") {
@@ -54,6 +55,7 @@ class Game {
           var index = 4;
         } else if(direction == "up" || direction === "down") {
           var tempBoard = getColArray(board.slice(0), 1);
+          var index = 1;
         }
       } else if(row_col === 2) {
         if(direction === "left" || direction === "right") {
@@ -61,6 +63,7 @@ class Game {
           var index = 8;
         } else if(direction == "up" || direction === "down") {
           var tempBoard = getColArray(board.slice(0), 2);
+          var index = 2;
         }
       } else if(row_col === 3) {
         if(direction === "left" || direction === "right") {
@@ -68,6 +71,7 @@ class Game {
           var index = 12;
         } else if(direction == "up" || direction === "down") {
           var tempBoard = getColArray(board.slice(0), 3);
+          var index = 3;
         }
       }
 
@@ -89,17 +93,17 @@ class Game {
           break;
 
         case "up":
-          el0 = index+3;
-          el1 = index+2;
-          el2 = index+1;
-          el3 = index+0;
+          el0 = index+0;
+          el1 = index+4;
+          el2 = index+8;
+          el3 = index+12;
           break;
 
         case "down":
-          el0 = index+0;
-          el1 = index+1;
-          el2 = index+2;
-          el3 = index+3;
+          el0 = index+12;
+          el1 = index+8;
+          el2 = index+4;
+          el3 = index+0;
           break;
       }
 
