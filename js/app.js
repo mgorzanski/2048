@@ -1,7 +1,3 @@
-import $ from 'jquery';
-
-window.$ = $;
-
 class Game {
   constructor() {
     this.board = [
@@ -10,20 +6,24 @@ class Game {
       0,0,0,0,
       0,0,0,0
     ];
-    this.game = $("#game");
+    this.game = document.getElementById("game");
     this.startValue = 2;
   }
 
   drawBoard() {
     this.board.map((value, index) => {
       if(value !== 0) {
-        //Template String Literals
-        const boxInner = `<div class="box-value">${value}</div>`;
-        const boxOuter = `<div id="box-${index}" class="box">${boxInner}</div>`;
-        this.game.append(boxOuter);
+        const boxInner = '<div class="box-value">' + value + '</div>';
+        let boxOuter = document.createElement('div');
+        boxOuter.id = index;
+        boxOuter.className = "box";
+        boxOuter.innerHTML = boxInner;
+        this.game = document.getElementById("game").appendChild(boxOuter);
       } else {
-        const boxOuter = `<div id="box-${index}" class="box"></div>`;
-        this.game.append(boxOuter);
+        let boxOuter = document.createElement('div');
+        boxOuter.id = index;
+        boxOuter.className = "box";
+        this.game = document.getElementById("game").appendChild(boxOuter);
       }
     });
   }
@@ -262,7 +262,10 @@ class Game {
   }
 
   clearBoard() {
-    this.game.empty();
+    let game = document.getElementById("game");
+    while(game.firstChild) {
+      game.removeChild(game.firstChild);
+    }
   }
 
   start() {
@@ -290,7 +293,7 @@ class Game {
   }
 }
 
-$(document).ready(() => {
+window.onload = () => {
   var game = new Game();
   game.start();
-});
+}
