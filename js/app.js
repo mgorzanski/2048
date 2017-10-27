@@ -39,7 +39,6 @@ class Game {
 
     function checkRow(board, row_col, direction) {
       let currBoard = board.slice(0);
-      let importantBlocksChanged = false;
 
       if(row_col === 0) {
         if(direction === "left" || direction === "right") {
@@ -111,6 +110,33 @@ class Game {
 
       function changeBlocks() {
         if(tempBoard.find(moreThanZero) != undefined) {
+          //two first blocks
+          if(currBoard[el0] != 0 && currBoard[el0] == currBoard[el1]) {
+            currBoard[el0] *= 2;
+            currBoard[el1] = currBoard[el2];
+            currBoard[el2] = currBoard[el3];
+            currBoard[el3] = 0;
+            blocksChanged = true;
+          }
+
+          //two middle blocks
+          if(currBoard[el1] != 0 && currBoard[el1] == currBoard[el2]) {
+            if(currBoard[el0] == 0) {
+              currBoard[el0] = currBoard[el1]*2;
+              if(currBoard[el3] != 0) {
+                currBoard[el1] = currBoard[el3];
+                currBoard[el2] = currBoard[el3] = 0;
+              } else {
+                currBoard[el1] = currBoard[el2] = currBoard[el3] = 0;
+              }
+            } else {
+              currBoard[el1] = currBoard[el2]*2;
+              currBoard[el2] = currBoard[el3];
+              currBoard[el3] = 0;
+            }
+            blocksChanged = true;
+          }
+
           //last two blocks
           if(currBoard[el2] != 0 && currBoard[el2] == currBoard[el3]) {
             if(currBoard[el1] == 0) {
@@ -125,36 +151,6 @@ class Game {
               currBoard[el2] *= 2;
               currBoard[el3] = 0;
             }
-            importantBlocksChanged = true;
-            blocksChanged = true;
-          }
-
-          //two middle blocks
-          if(currBoard[el1] != 0 && currBoard[el1] == currBoard[el2] && !importantBlocksChanged) {
-            if(currBoard[el0] == 0) {
-              currBoard[el0] = currBoard[el1]*2;
-              if(currBoard[el3] != 0) {
-                currBoard[el1] = currBoard[el3];
-                currBoard[el2] = currBoard[el3] = 0;
-              } else {
-                currBoard[el1] = currBoard[el2] = currBoard[el3] = 0;
-              }
-            } else {
-              currBoard[el1] = currBoard[el2]*2;
-              currBoard[el2] = currBoard[el3];
-              currBoard[el3] = 0;
-            }
-            importantBlocksChanged = true
-            blocksChanged = true;
-          }
-
-          //two first blocks
-          if(currBoard[el0] != 0 && currBoard[el0] == currBoard[el1] && !importantBlocksChanged) {
-            currBoard[el0] *= 2;
-            currBoard[el1] = currBoard[el2];
-            currBoard[el2] = currBoard[el3];
-            currBoard[el3] = 0;
-            importantBlocksChanged = true;
             blocksChanged = true;
           }
 
