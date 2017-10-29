@@ -9,6 +9,7 @@ class Game {
     this.game = document.getElementById("game");
     this.blockDefaultValue = 2;
     this.blocksChanged = false;
+    this.score = 0;
   }
 
   drawBoard() {
@@ -42,6 +43,7 @@ class Game {
       this.blocksChanged = false;
     }
 
+    this.updateScore();
     this.board = newBoard;
     this.clearBoard();
     this.drawBoard();
@@ -123,19 +125,23 @@ class Game {
     }
 
     let blocksChanged = false;
+    let newBlockValue;
 
     if(tempBoard.find(this.moreThanZero) != undefined) {
       //two first blocks
       if(currBoard[el0] != 0 && currBoard[el0] == currBoard[el1]) {
+        newBlockValue = currBoard[el0]*2;
         currBoard[el0] *= 2;
         currBoard[el1] = currBoard[el2];
         currBoard[el2] = currBoard[el3];
         currBoard[el3] = 0;
         blocksChanged = true;
+        this.score += newBlockValue;
       }
 
       //two middle blocks
       if(currBoard[el1] != 0 && currBoard[el1] == currBoard[el2]) {
+        newBlockValue = currBoard[el1]*2;
         if(currBoard[el0] == 0) {
           currBoard[el0] = currBoard[el1]*2;
           if(currBoard[el3] != 0) {
@@ -150,10 +156,12 @@ class Game {
           currBoard[el3] = 0;
         }
         blocksChanged = true;
+        this.score += newBlockValue;
       }
 
       //last two blocks
       if(currBoard[el2] != 0 && currBoard[el2] == currBoard[el3]) {
+        newBlockValue = currBoard[el2]*2;
         if(currBoard[el1] == 0) {
           if(currBoard[el0] == 0) {
             currBoard[el0] = currBoard[el2]*2;
@@ -167,6 +175,7 @@ class Game {
           currBoard[el3] = 0;
         }
         blocksChanged = true;
+        this.score += newBlockValue;
       }
 
       if(currBoard[el1] != 0) {
@@ -186,8 +195,10 @@ class Game {
             currBoard[el1] = currBoard[el3];
             currBoard[el3] = currBoard[el2] = 0;
           } else if(currBoard[el0] == currBoard[el2]) {
+            newBlockValue = currBoard[el0]*2;
             currBoard[el0] *= 2;
             currBoard[el2] = 0;
+            this.score += newBlockValue;
           } else {
             currBoard[el1] = currBoard[el2];
             currBoard[el2] = currBoard[el3];
@@ -204,15 +215,19 @@ class Game {
               currBoard[el0] = currBoard[el3];
               currBoard[el3] = currBoard[el2] = currBoard[el1] = 0;
             } else if(currBoard[el0] == currBoard[el3]) {
+              newBlockValue = currBoard[el0]*2;
               currBoard[el0] *= 2;
               currBoard[el3] = 0;
+              this.score += newBlockValue;
             } else {
               currBoard[el1] = currBoard[el3];
               currBoard[el3] = currBoard[el2] = 0;
             }
           } else if(currBoard[el1] == currBoard[el3]) {
+            newBlockValue = currBoard[el1]*2;
             currBoard[el1] *= 2;
             currBoard[el3] = 0;
+            this.score += newBlockValue;
           } else {
             currBoard[el2] = currBoard[el3];
             currBoard[el3] = 0;
@@ -270,6 +285,11 @@ class Game {
     while(gameBoard.firstChild) {
       game.removeChild(gameBoard.firstChild);
     }
+  }
+
+  updateScore() {
+    let score = document.getElementById("score");
+    score.innerHTML = "Wynik: " + this.score;
   }
 
   start() {
