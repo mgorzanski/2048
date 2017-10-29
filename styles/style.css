@@ -2,8 +2,14 @@ body, html {
   font-family:Arial;
 }
 
+#score {
+  margin:135px 0 40px 0;
+  text-align:center;
+  font-size:31px;
+}
+
 #game {
-  margin:180px auto;
+  margin:0 auto;
   width:500px;
   height: 500px;
   border:7px solid #efefef;
