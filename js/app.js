@@ -10,6 +10,10 @@ class Game {
     this.blockDefaultValue = 2;
     this.blocksChanged = false;
     this.score = 0;
+    this.noChangesLeft = false;
+    this.noChangesRight = false;
+    this.noChangesUp = false;
+    this.noChangesDown = false;
   }
 
   drawBoard() {
@@ -37,16 +41,50 @@ class Game {
       newBoard = this.checkLine(newBoard, i, direction);
     }
 
-    if(this.blocksChanged && !this.onlyOneBoxEmpty(newBoard)) {
-      let newBox = this.generateRandomBox(newBoard);
-      newBoard[newBox] = this.blockDefaultValue;
-      this.blocksChanged = false;
+    if(this.blocksChanged) {
+      if(this.isEmptyBox(newBoard)) {
+        let newBox = this.generateRandomBox(newBoard);
+        newBoard[newBox] = this.blockDefaultValue;
+        this.blocksChanged = false;
+        this.noChangesLeft = false;
+        this.noChangesRight = false;
+        this.noChangesUp = false;
+        this.noChangesDown = false;
+      }
+    } else {
+      switch(direction) {
+        case "left":
+        this.noChangesLeft = true;
+        break;
+
+        case "right":
+        this.noChangesRight = true;
+        break;
+
+        case "up":
+        this.noChangesUp = true;
+        break;
+
+        case "down":
+        this.noChangesDown = true;
+        break;
+      }
     }
 
     this.updateScore();
     this.board = newBoard;
     this.clearBoard();
     this.drawBoard();
+
+    if(this.playerWon()) {
+      setTimeout(() => {
+        alert("Wygrałeś!");
+        this.restartGame();
+      }, 100);
+    } else if(this.noChangesLeft && this.noChangesRight && this.noChangesUp && this.noChangesDown) {
+      alert("Przegrałeś!");
+      this.restartGame();
+    }
   }
 
   checkLine(board, line, direction) {
@@ -248,6 +286,15 @@ class Game {
     return element > 0;
   }
 
+  playerWon(board = this.board) {
+    if(board.find((element) => {
+      return element == 2048;
+    })) {
+      return true;
+    }
+    return false;
+  }
+
   //get every fourth element from array
   getColArray(board, col) {
     let tempBoardCurr = [];
@@ -258,7 +305,7 @@ class Game {
     return tempBoardCurr;
   }
 
-  onlyOneBoxEmpty(board = this.board) {
+  isEmptyBox(board = this.board) {
     let emptyBoxes = 0;
     board.map((value) => {
       if(value === 0) {
@@ -266,7 +313,8 @@ class Game {
       }
     });
 
-    if(emptyBoxes === 1) {
+    console.log(emptyBoxes);
+    if(emptyBoxes > 0) {
       return true;
     }
     return false;
@@ -290,6 +338,27 @@ class Game {
   updateScore() {
     let score = document.getElementById("score");
     score.innerHTML = "Wynik: " + this.score;
+  }
+
+  restartGame() {
+    this.board = [
+      2,2,0,0,
+      0,0,0,0,
+      0,0,0,0,
+      0,0,0,0
+    ];
+    this.game = document.getElementById("game");
+    this.blockDefaultValue = 2;
+    this.blocksChanged = false;
+    this.score = 0;
+    this.noChangesLeft = false;
+    this.noChangesRight = false;
+    this.noChangesUp = false;
+    this.noChangesDown = false;
+
+    this.updateScore();
+    this.clearBoard();
+    this.drawBoard();
   }
 
   start() {
